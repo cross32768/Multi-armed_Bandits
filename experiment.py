@@ -10,6 +10,23 @@ from solver import EpsilonGreedy, UCB1, PolicyGradient
 class Experiment:
     def __init__(self):
         # config
+        self.params = None
+        self.reset_config()
+
+        # logging
+        self.mean_average_rewards_record = {}
+        self.mean_optimal_action_rates_record = {}
+
+    def print_config(self):
+        for key in self.params:
+            print('{}: {}'.format(key, self.params[key]))
+
+    def set_config(self, param_name, value):
+        if param_name not in self.params.keys():
+            raise ValueError('Wrong key. Check key list by "print_config" method.')
+        self.params[param_name] = value
+
+    def reset_config(self):
         self.params = {'problem_name': cfg.PROBLEM_NAME,
                        'k_arms': cfg.K_ARMS,
                        'reward_std': cfg.REWARD_STD,
@@ -27,20 +44,7 @@ class Experiment:
                        'with_baseline': cfg.WITH_BASELINE,
                        'n_runs': cfg.N_RUNS,
                        'n_steps': cfg.N_STEPS
-                       }
-
-        # logging
-        self.mean_average_rewards_record = {}
-        self.mean_optimal_action_rates_record = {}
-
-    def print_config(self):
-        for key in self.params:
-            print('{}: {}'.format(key, self.params[key]))
-
-    def set_config(self, param_name, value):
-        if param_name not in self.params.keys():
-            raise ValueError('Wrong key. Check key list by "print_config" method.')
-        self.params[param_name] = value
+                       }        
 
     def run(self, experiment_name):
         mean_average_rewards = np.zeros(self.params['n_steps'])
